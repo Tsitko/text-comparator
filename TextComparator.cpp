@@ -27,8 +27,6 @@ public:
 private:
 	map<string, int> words_to_texts_;
 	map<string, int> ngrams_to_texts_;
-	map<string, int> words_freq_;
-	map<string, int> ngrams_freq_;
 	set<string> stop_words_;
 	int texts_count_;
 	
@@ -62,6 +60,14 @@ private:
 	}
 	
 	double ComputeNgramJordanMeasure(const vector<string>& text1, const vector<string> text2) const{
+		//TODO: method realization
+	}
+	
+	double ComputeWordFreq(const string& word, const vector<string>& text) const{
+		//TODO: method realization
+	}
+	
+	double ComputeNgramFreq(const string& ngram, const vector<string>& text) const{
 		//TODO: method realization
 	}
 };
