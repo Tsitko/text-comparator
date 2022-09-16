@@ -1,3 +1,10 @@
+#include <cmath>
+#include <map>
+#include <set>
+#include <string>
+#include <vector>
+#include <numeric>
+
 #ifndef NGRAM_SIZE
 #define NGRAM_SIZE 3
 #endif
@@ -14,33 +21,33 @@ struct ComparisonStatisctics{
 class TextComparator{
 	
 public:
-	explicit TextComparator(const string& stop_words_string)
+	explicit TextComparator(const std::string& stop_words_string)
 	: stop_words_(SplitStopWords(stop_words_string))
 	{
 	}
 	
 	template <typename StringContainer>
 	explicit TextComparator(const StringContainer& stop_words){
-		string stop_words_string = ""s;
-		for(const string& word: stop_words){
+		std::string stop_words_string = ""s;
+		for(const std::string& word: stop_words){
 			stop_words_string += word;
 		}
 		stop_words_ = SplitStopWords(stop_words_string);
 	}		
 	
-	void Feed(const string& text){
+	void Feed(const std::string& text){
 		//TODO: method realization
 	}
 	
-	ComparisonStatisctics Compare(const string& text1, const string& text1){
+	ComparisonStatisctics Compare(const std::string& text1, const std::string& text1){
 		//TODO: method realization 
 	}
 
 private:
-	map<string, int> words_to_texts_;
-	map<string, int> ngrams_to_texts_;
-	set<string> stop_words_;
-	set<int> valid_symbols_;
+	std::map<std::string, int> words_to_texts_;
+	std::map<std::string, int> ngrams_to_texts_;
+	std::set<std::string> stop_words_;
+	std::set<int> valid_symbols_;
 	int texts_count_;
 	
 	bool IsValidSymbol(const char c) const{
@@ -60,8 +67,8 @@ private:
 	}
 	
 	
-	string ClearText(const string& text) const{
-		string clean_text=""s;
+	std::string ClearText(const std::string& text) const{
+		std::string clean_text=""s;
 		for(const char c: text){
 			if(IsValidSymbol(c)){
 				clean_text+=c;
@@ -70,10 +77,10 @@ private:
 		return clean_text;
 	}
 	
-	vector<string> SplitWords(const string& text) const{
-		string clean_text = ClearText(text);
-		string temp="";
-		vector<string> result;
+	std::vector<std::string> SplitWords(const std::string& text) const{
+		std::string clean_text = ClearText(text);
+		std::string temp="";
+		std::vector<std::string> result;
 		for(const char c: clean_text){
 			if(c==' ' && !temp.empty()){
 				result.push_back(temp);
@@ -87,17 +94,17 @@ private:
 		}
 		return result;
 		
-	set<string> SplitStopWords(const string& text) const{
-		set<string> result;
-		for(const string& word: SplitWords(text)){
+	std::set<std::string> SplitStopWords(const std::string& text) const{
+		std::set<std::string> result;
+		for(const std::string& word: SplitWords(text)){
 			result.insert(word);
 		}
 		return result;
 	}
 	
-	vector<string> SplitnIntoWordsNoStop(const string& text) const{
-		vector<string> result;
-		for(const string& word: SplitWords(text)){
+	std::vector<std::string> SplitnIntoWordsNoStop(const std::string& text) const{
+		std::vector<std::string> result;
+		for(const std::string& word: SplitWords(text)){
 			if(!stop_words_.count(word)){
 				result.push_back(word);
 			}
@@ -105,13 +112,13 @@ private:
 		return result;
 	}
 	
-	vector<string> SplitnIntoNgramsNoStop(const string& text) const{
-		vector<string> result;
-		string ngram_string = ""s;
-		for(const string& word: SplitnIntoWordsNoStop(text)){
+	std::vector<std::string> SplitnIntoNgramsNoStop(const std::string& text) const{
+		std::vector<std::string> result;
+		std::string ngram_string = ""s;
+		for(const std::string& word: SplitnIntoWordsNoStop(text)){
 			ngram_string += word;
 		}
-		string temp = ""s;
+		std::string temp = ""s;
 		for(const char c: ngram_string){
 			if(temp.size() == NGRAM_SIZE){
 				result.push_back(temp);
@@ -128,27 +135,59 @@ private:
 		return result;
 	}
 	
-	double ComputeRelevance(const vector<string>& text1, const vector<string> text2) const{
+	double ComputeWordIdf (const std::string& word) const{
+		double Idf = 0.0;
+		if(words_to_texts_.count(word)){
+			Idf = log(1.0*texts_count_/words_to_texts_.at(word).size());
+		} else{
+			Idf = log(1.0*texts_count_);
+		}
+		return Idf;
+	}
+	
+	double ComputeNgramIdf (const std::string& ngram) const{
+		double Idf = 0.0;
+		if(ngrams_to_texts_.count(ngram)){
+			Idf = log(1.0*texts_count_/ngrams_to_texts_.at(ngram).size());
+		} else{
+			Idf = log(texts_count_);
+		}
+		return Idf;
+	}
+	
+	double ComputeWordFreq(const std::string& word, 
+			const std::vector<std::string>& words1, 
+			const std::vector<std::string>& words2) const{
+				
+		return (count(words1.begin(), words1.end(), word) + count(words2.begin(), words2.end(), word))/(words1.size() + words2.size());
+	}
+	
+	double ComputeNgramFreq(const std::string& ngram, 
+			const std::vector<std::string>& ngrams1, 
+			const std::vector<std::string>& ngrams1) const{
+				
+		return (count(ngrams1.begin(), ngrams1.end(), ngram) + count(ngrams2.begin(), ngrams2.end(), ngram))/(ngrams1.size() + ngrams2.size());
+	}
+	
+	double ComputeRelevance(const std::vector<std::string>& words1, const std::vector<std::string>& words2) const{
+		double relevance = 0.0;
+		for(const std::string& word: words1){
+			if(count(words2.begin(), words2.end(), word) > 0){
+				relevance += ComputeWordFreq(word, words1, words2)*ComputeWordIdf(word);
+			}
+		}			
+		return relevance;
+	}
+	
+	double ComputeNgramRelevance(const std::string& text1, const std::string text2) const{
 		//TODO: method realization
 	}
 	
-	double ComputeNgramRelevance(const vector<string>& text1, const vector<string> text2) const{
+	double ComputeWordJordanMeasure(const std::string& text1, const std::string text2) const{
 		//TODO: method realization
 	}
 	
-	double ComputeJordanMeasure(const vector<string>& text1, const vector<string> text2) const{
-		//TODO: method realization
-	}
-	
-	double ComputeNgramJordanMeasure(const vector<string>& text1, const vector<string> text2) const{
-		//TODO: method realization
-	}
-	
-	double ComputeWordFreq(const string& word, const vector<string>& text) const{
-		//TODO: method realization
-	}
-	
-	double ComputeNgramFreq(const string& ngram, const vector<string>& text) const{
+	double ComputeNgramJordanMeasure(const std::string& text1, const std::string text2) const{
 		//TODO: method realization
 	}
 };
