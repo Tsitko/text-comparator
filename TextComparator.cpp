@@ -117,7 +117,9 @@ private:
 				result.push_back(temp);
 				temp = ""s;
 			} else{
-				temp += c;
+				if(c!=' '){
+					temp += c;
+				}
 			}
 		}
 		if(!temp.empty()){
