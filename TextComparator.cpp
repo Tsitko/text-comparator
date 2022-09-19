@@ -160,7 +160,6 @@ public:
 		++texts_id_;
 		Line text_line= Line(text);
 		std::vector<std::string> words = SplitnIntoWordsNoStop(text_line);
-		print(SplitnIntoWordsNoStop(text_line));
 		for(const std::string& word: words){
 			words_to_texts_[word].insert(texts_id_);
 		}
@@ -238,7 +237,6 @@ private:
 		} else{
 			Idf = log(texts_id_);
 		}
-				std::cout<<Idf<<std::endl;
 		return Idf;
 	}
 	
