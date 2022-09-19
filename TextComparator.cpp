@@ -53,6 +53,8 @@ public:
 
 	explicit Line(const std::string& text): line_(text){}
 	
+	explicit Line(const std::string& text, const std::set<char> valid_symbols): line_(text), valid_symbols_(valid_symbols){}
+	
 	std::vector<std::string> SplitWordsToVec() {
 		std::string clean_text = ClearText(line_);
 		std::string temp="";
@@ -120,7 +122,9 @@ private:
 
 class StopWords{
 public:
-	StopWords(const Line& line){
+	StopWords(){}
+	
+	StopWords(Line& line){
 		stop_words_line_=line;
 		stop_words_set_ = stop_words_line_.SplitWordsToSet();
 	}
@@ -142,13 +146,15 @@ private:
 
 class TextComparator{
 public:
-	explicit TextComparator(const std::string& stop_words_string)
-	: stop_words_(StopWords(Line(stop_words_string))){
-
+	explicit TextComparator(const std::string& stop_words_string){
+		SetValidSymbols();
+		Line stop_words_line = Line(stop_words_string, valid_symbols_);
+		stop_words_= StopWords(stop_words_line);
 	}
 	
 	template <typename StringContainer>
 	explicit TextComparator(const StringContainer& stop_words){
+		SetValidSymbols();
 		std::string stop_words_string = "";
 		for(const std::string& word: stop_words){
 			stop_words_string += word;
@@ -158,7 +164,7 @@ public:
 	
 	void Feed(const std::string& text){
 		++texts_id_;
-		Line text_line= Line(text);
+		Line text_line= Line(text, valid_symbols_);
 		std::vector<std::string> words = SplitnIntoWordsNoStop(text_line);
 		for(const std::string& word: words){
 			words_to_texts_[word].insert(texts_id_);
@@ -171,8 +177,8 @@ public:
 	
 	ComparisonStatisctics Compare(const std::string& text1, const std::string& text2){
 		ComparisonStatisctics result;
-		Line text_line1= Line(text1);
-		Line text_line2= Line(text2);
+		Line text_line1= Line(text1, valid_symbols_);
+		Line text_line2= Line(text2, valid_symbols_);
 		result.relevance = ComputeRelevance(SplitnIntoWordsNoStop(text_line1), SplitnIntoWordsNoStop(text_line2));
 		result.ngram_relevance = ComputeNgramRelevance(SplitnIntoNgramsNoStop(text_line1), SplitnIntoNgramsNoStop(text_line2));
 		result.jordan_measure = ComputeJordanMeasure(SplitnIntoWordsNoStop(text_line1), SplitnIntoWordsNoStop(text_line2));
@@ -184,9 +190,22 @@ private:
 	std::map<std::string, std::set<int>> words_to_texts_;
 	std::map<std::string, std::set<int>> ngrams_to_texts_;
 	StopWords stop_words_;
-	std::set<int> valid_symbols_;
+	std::set<char> valid_symbols_;
 	int texts_id_=0;
 		
+	void SetValidSymbols(){
+		valid_symbols_.insert(static_cast<char>(32)); // space
+		for(int i=48; i<=57; ++i){
+			valid_symbols_.insert(static_cast<char>(i)); // 0-9
+		}
+		for(int i=64; i<=90; ++i){
+			valid_symbols_.insert(static_cast<char>(i)); // @,A-Z
+		}
+		for(int i=97; i<=122; ++i){
+			valid_symbols_.insert(static_cast<char>(i)); // a-z
+		}
+	}
+	
 	std::vector<std::string> SplitnIntoWordsNoStop(Line& text) {
 		return stop_words_.SplitnIntoWordsNoStop(text);
 	}
