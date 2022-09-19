@@ -50,9 +50,6 @@ public:
 		return words_set_;
 	}
 	
-
-	
-	
 private:
 	std::string line_;
 	std::vector<std::string> words_vec_;
@@ -86,9 +83,6 @@ private:
 		}
 		return clean_text;
 	}
-	
-	
-	
 };
 
 class StopWords{
@@ -156,8 +150,6 @@ private:
 	StopWords stop_words_;
 	std::set<int> valid_symbols_;
 	int texts_id_=0;
-	
-	
 		
 	std::vector<std::string> SplitnIntoWordsNoStop(const Line& text) const{
 		return stop_words_.SplitnIntoWordsNoStop(text);
@@ -191,9 +183,9 @@ private:
 	double ComputeWordIdf (const std::string& word) const{
 		double Idf = 0.0;
 		if(words_to_texts_.count(word)){
-			Idf = log(1.0*texts_count_/words_to_texts_.at(word).size());
+			Idf = log(1.0*texts_id_/words_to_texts_.at(word).size());
 		} else{
-			Idf = log(1.0*texts_count_);
+			Idf = log(texts_id_);
 		}
 		return Idf;
 	}
@@ -201,9 +193,9 @@ private:
 	double ComputeNgramIdf (const std::string& ngram) const{
 		double Idf = 0.0;
 		if(ngrams_to_texts_.count(ngram)){
-			Idf = log(1.0*texts_count_/ngrams_to_texts_.at(ngram).size());
+			Idf = log(1.0*texts_id_/ngrams_to_texts_.at(ngram).size());
 		} else{
-			Idf = log(texts_count_);
+			Idf = log(texts_id_);
 		}
 		return Idf;
 	}
