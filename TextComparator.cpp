@@ -7,28 +7,10 @@
 #include <iostream>
 #include <algorithm>
 
-
-
 #ifndef NGRAM_SIZE
 #define NGRAM_SIZE 3
 #endif
 
-void print(const std::vector<std::string>& s){
-	for(const std::string w: s){
-		std::cout<<w<<" ";
-	}
-	std::cout<<std::endl;
-}
-
-void print(const std::map<std::string, std::set<int>>& s){
-	for(const auto [w, m]: s){
-		std::cout<<w<<": ";
-		for(int i: m){
-			std::cout<<i<<" ";
-		}
-	}
-	std::cout<<std::endl;
-}
 
 struct ComparisonStatisctics{
 	ComparisonStatisctics(){}
@@ -49,102 +31,9 @@ struct ComparisonStatisctics{
 	double ngram_jordan_measure = 0.0;
 };
 
-class Line{
-public:
-	Line(){}
 
-	explicit Line(const std::string& text): line_(text){}
-	
-	explicit Line(const std::string& text, const std::set<char> valid_symbols): line_(text), valid_symbols_(valid_symbols){}
-	
-	std::vector<std::string> SplitWordsToVec() {
-		std::string clean_text = ClearText(line_);
-		std::string temp="";
-		if(words_vec_.empty()){
-			for(const char c: clean_text){
-				if(c==' ' && !temp.empty()){
-					words_vec_.push_back(temp);
-					temp="";
-				} else{
-					temp+=c;
-				}
-			}
-			if(!temp.empty()){
-				words_vec_.push_back(temp);
-			}
-		}
-		return words_vec_;
-	}
-		
-	std::set<std::string> SplitWordsToSet() {
-		if(words_set_.empty()){
-			for(const std::string& word: SplitWordsToVec()){
-			words_set_.insert(word);
-			}
-		}
-		
-		return words_set_;
-	}
-	
-private:
-	std::string line_;
-	std::vector<std::string> words_vec_;
-	std::set<std::string> words_set_;
-	std::set<char> valid_symbols_;
-	
-	bool IsValidSymbol(const char c) {
-		if(valid_symbols_.empty()){ // initialization
-			valid_symbols_.insert(static_cast<char>(32)); // space
-			for(int i=48; i<=57; ++i){
-				valid_symbols_.insert(static_cast<char>(i)); // 0-9
-			}
-			for(int i=64; i<=90; ++i){
-				valid_symbols_.insert(static_cast<char>(i)); // @,A-Z
-			}
-			for(int i=97; i<=122; ++i){
-				valid_symbols_.insert(static_cast<char>(i)); // a-z
-			}
-		}
-		return valid_symbols_.count(c);
-	}
-	
-	
-	std::string ClearText(const std::string& text, char replacement = ' ') {
-		std::string clean_text="";
-		for(const char c: text){
-			if(IsValidSymbol(c)){
-				clean_text += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
-			} else{
-				clean_text += replacement;
-			}
-		}
-		return clean_text;
-	}
-};
 
-class StopWords{
-public:
-	StopWords(){}
-	
-	StopWords(Line& line){
-		stop_words_line_=line;
-		stop_words_set_ = stop_words_line_.SplitWordsToSet();
-	}
-	
-	std::vector<std::string> SplitnIntoWordsNoStop(Line& text) const{
-		std::vector<std::string> result;
-		for(const std::string& word: text.SplitWordsToVec()){
-			if(!stop_words_set_.count(word)){
-				result.push_back(word);
-			}
-		}
-		return result;
-	}
-	
-private:
-	Line stop_words_line_=Line();
-	std::set<std::string> stop_words_set_;
-};
+
 
 class TextComparator{
 public:
@@ -306,116 +195,3 @@ private:
 	}
 };
 
-
-// ------------------------- Testing framework ----------------------------
-
-template<typename Container>
-void Print(std::ostream& out, const Container& container){
-    bool first=true;
-    for (auto element:container) {
-        if(!first){
-            out << ", ";
-        }
-        out<<element;
-        first=false;
-    }
-}
-
-template<typename Element1, typename Element2>
-void Print(std::ostream& out, const std::map<Element1, Element2>& container){
-    bool first=true;
-    for (auto element:container) {
-        if(!first){
-            out << ", ";
-        }
-        out<<element.first<<": "<<element.second;
-        first=false;
-    }
-}
-template<typename Element>
-std::ostream& operator<<(std::ostream& out, const std::vector<Element> container) {
-    out<<"[";
-    Print(out, container);
-    out<<"]";
-    return out;
-}  
-template<typename Element>
-std::ostream& operator<<(std::ostream& out, const std::set<Element> container) {
-    out<<"{";
-    Print(out, container);
-    out<<"}";
-    return out;
-}
-template<typename Element1, typename Element2>
-std::ostream& operator<<(std::ostream& out, const std::map<Element1, Element2> container) {
-    out<<"{";
-    Print(out, container);
-    out<<"}";
-    return out;
-}
-
-
-void AssertImpl(bool value, const std::string& expr_str, const std::string& file, const std::string& func, unsigned line,
-                const std::string& hint) {
-    if (!value) {
-        std::cerr << file << "(" << line << "): " << func << ": ";
-        std::cerr << "ASSERT(" << expr_str << ") failed.";
-        if (!hint.empty()) {
-            std::cerr << " Hint: " << hint;
-        }
-        std::cerr << std::endl;
-        abort();
-    }
-}
-
-template <typename T, typename U>
-void AssertEqualImpl(const T& t, const U& u, const std::string& t_str, const std::string& u_str, const std::string& file,
-                     const std::string& func, unsigned line, const std::string& hint) {
-    if (t != u) {
-        std::cerr << std::boolalpha;
-        std::cerr << file << "(" << line << "): " << func << ": ";
-        std::cerr << "ASSERT_EQUAL(" << t_str << ", " << u_str << ") failed: ";
-        std::cerr << t << " != " << u << ".";
-        if (!hint.empty()) {
-            std::cerr << " Hint: " << hint;
-        }
-        std::cerr << std::endl;
-        std::abort();
-    }
-}
-
-#define ASSERT_EQUAL(a, b) AssertEqualImpl((a), (b), #a, #b, __FILE__, __FUNCTION__, __LINE__, ""s)
-
-#define ASSERT_EQUAL_HINT(a, b, hint) AssertEqualImpl((a), (b), #a, #b, __FILE__, __FUNCTION__, __LINE__, (hint))
-
-#define ASSERT(expr) AssertImpl(!!(expr), #expr, __FILE__, __FUNCTION__, __LINE__, ""s)
-
-#define ASSERT_HINT(expr, hint) AssertImpl(!!(expr), #expr, __FILE__, __FUNCTION__, __LINE__, (hint))
-
-template <typename TestFunc>
-void RunTestImpl(TestFunc& func, const std::string& func_str) {
-    func();
-    std::cerr<<func_str<<" OK"<<std::endl;
-}
-
-#define RUN_TEST(func)  RunTestImpl(func, #func)
-
-//-------------------------- Tests ----------------------------------------
-
-
-void print(ComparisonStatisctics s){
-	std::cout<<s.relevance<<" "<<s.ngram_relevance<<std::endl;
-}
-
-int main(){
-	std::string s= "in the as a is am are with";
-	TextComparator t_c = TextComparator(s);
-	t_c.Feed("computer with 1tb ssd");
-	t_c.Feed("a bottle of whisky");
-	ComparisonStatisctics s1 = t_c.Compare("notebook with 512GB ssd", "computer with 1tb ssd");
-	ComparisonStatisctics s2 = t_c.Compare("notebook with 512GB ssd", "a bottle of whisky");
-	ComparisonStatisctics s3 = t_c.Compare("cmputer with 512GB ssd", "computer with 1tb ssd");
-	print(s1);
-	print(s2);
-	print(s3);
-}
