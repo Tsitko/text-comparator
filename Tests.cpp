@@ -3,6 +3,9 @@
 #include "StopWords.cpp"
 #include "TextComparator.cpp"
 
+
+inline const double EPSILON = 10e-6;
+
 // -------------------------- Testing Line class ----------------------------------------------
 
 void TestLineSplitWords(){
@@ -79,31 +82,61 @@ void TestLine(){
 
 // -------------------------- Testing StopWords class ----------------------------------------------
 
+
+
 void TestStopWordsSplit(){
 	return;
 	//empty stop words
+	{
+		std::string s = "";
+		Line s_line = Line(s);
+		StopWords sw = StopWords(s_line);
+		std::string to_clean = "a small mouse in the house";
+		std::vector<std::string> v;
+		v={"a", "small", "mouse", "in", "the", "house"};
+		Line to_clean_line = Line(to_clean);
+		ASSERT_EQUAL_HINT(sw.SplitnIntoWordsNoStop(to_clean_line), v, "There are no stop words");
+	}
 	
 	//non-empty stop words
-}
-
-void TestStopWordsInit(){
-	return;
-	//stop words string
-	
-	//stop words string set
-	
-	//stop words vector
+	{
+		std::string s = "a in is the with";
+		Line s_line = Line(s);
+		StopWords sw = StopWords(s_line);
+		std::string to_clean = "a small mouse in the house";
+		std::vector<std::string> v;
+		v={"small", "mouse", "house"};
+		Line to_clean_line = Line(to_clean);
+		ASSERT_EQUAL_HINT(sw.SplitnIntoWordsNoStop(to_clean_line), v, "stop words are " + s);
+	}
 }
 
 void TestStopWords(){
 	RUN_TEST(TestStopWordsSplit);
-	RUN_TEST(TestStopWordsInit);
 }
 
 // -------------------------- Testing TextComparator class ----------------------------------------------
 
 void TestTextComparatorRelevance(){
-	return;
+	{
+		std::string stop_words = "a of in is the with";
+		TextComparator tc = TextComparator(stop_words);
+		tc.Feed("A man with the gun");
+		tc.Feed("The large powerfull gun");
+		tc.Feed("A bottle of whisky");
+		ComparisonStatisctics stat = tc.Compare("A man with small but powerfull gun", "A man with the gun");
+		double relevance = stat.relevance;
+		double true_relevance = (1.0/2)*std::log(3.0/2) + (1.0/2)*std::log(3.0/2);
+		std::cout<<true_relevance<<" "<<relevance<<std::endl;
+		ASSERT(std::abs(relevance-true_relevance)<EPSILON);
+		stat = tc.Compare("A man with small but powerfull gun", "The large powerfull gun");
+		relevance = stat.relevance;
+		ASSERT(std::abs(relevance-0)<EPSILON);
+		stat = tc.Compare("A man with small but powerfull gun", "A bottle of whisky");
+		relevance = stat.relevance;
+		ASSERT_EQUAL(relevance,0);
+	}
+	
 }
 
 void TestTextComparatorNgramRelevance(){
