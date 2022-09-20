@@ -1,6 +1,11 @@
 #include <set>
 #include <string>
 
+#ifndef LINE
+#include "Line.cpp"
+#endif
+
+#define STOPWORDS
 
 class StopWords{
 public:

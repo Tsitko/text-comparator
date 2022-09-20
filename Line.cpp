@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 
+#define LINE
+
 class Line{
 public:
 	Line(){}

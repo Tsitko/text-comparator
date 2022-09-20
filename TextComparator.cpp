@@ -7,6 +7,14 @@
 #include <iostream>
 #include <algorithm>
 
+#ifndef LINE
+#include "Line.cpp"
+#endif
+#ifndef STOPWORDS
+#include "StopWords.cpp"
+#endif
+
+
 #ifndef NGRAM_SIZE
 #define NGRAM_SIZE 3
 #endif

@@ -1,5 +1,3 @@
-#include "Line.cpp"
-#include "StopWords.cpp"
 #include "TextComparator.cpp"
 
 void print(const std::vector<std::string>& s){

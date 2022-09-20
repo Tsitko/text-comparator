@@ -3,6 +3,8 @@
 #include "StopWords.cpp"
 #include "TextComparator.cpp"
 
+// -------------------------- Testing Line class ----------------------------------------------
+
 void TestLineSplitWords(){
 	//To vector
 	{
@@ -62,6 +64,10 @@ void TestLine(){
 	RUN_TEST(TestLineSplitWords);
 	RUN_TEST(TestLineValidation);
 }
+
+// -------------------------- Testing StopWords class ----------------------------------------------
+
+// -------------------------- Testing TextComparator class ----------------------------------------------
 
 void TestAll(){
 	TestLine();
