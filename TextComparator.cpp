@@ -158,25 +158,23 @@ private:
 		return Idf;
 	}
 	
-	double ComputeWordFreq(const std::string& word, 
-			const std::vector<std::string>& words1, 
-			const std::vector<std::string>& words2) const{
+	double ComputeWordFreq(const std::string& word,  
+			const std::vector<std::string>& words) const{
 				
-		return 1.0*(std::count(words1.begin(), words1.end(), word) + count(words2.begin(), words2.end(), word))/(words1.size() + words2.size());
+		return 1.0*(std::count(words.begin(), words.end(), word))/words.size();
 	}
 	
 	double ComputeNgramFreq(const std::string& ngram, 
-			const std::vector<std::string>& ngrams1, 
-			const std::vector<std::string>& ngrams2) const{
+			const std::vector<std::string>& ngrams) const{
 				
-		return 1.0*(std::count(ngrams1.begin(), ngrams1.end(), ngram) + std::count(ngrams2.begin(), ngrams2.end(), ngram))/(ngrams1.size() + ngrams2.size());
+		return 1.0*(std::count(ngrams.begin(), ngrams.end(), ngram))/ngrams.size();
 	}
 	
 	double ComputeRelevance(const std::vector<std::string>& words1, const std::vector<std::string>& words2) const{
 		double relevance = 0.0;
 		for(const std::string& word: words1){
 			if(std::count(words2.begin(), words2.end(), word) > 0){
-				relevance += ComputeWordFreq(word, words1, words2)*ComputeWordIdf(word);
+				relevance += ComputeWordFreq(word, words2)*ComputeWordIdf(word);
 			}
 		}			
 		return relevance;
@@ -186,20 +184,34 @@ private:
 		double relevance = 0.0;
 		for(const std::string& ngram: ngrams1){
 			if(count(ngrams2.begin(), ngrams2.end(), ngram) > 0){
-				relevance += ComputeNgramFreq(ngram, ngrams1, ngrams2)*ComputeNgramIdf(ngram);
+				relevance += ComputeNgramFreq(ngram, ngrams2)*ComputeNgramIdf(ngram);
 			}
 		}			
 		return relevance;
 	}
 	
 	double ComputeJordanMeasure(const std::vector<std::string>& words1, const std::vector<std::string>& words2) const{
-		double jordan_measure=0.0;
-		return jordan_measure;
+		double jordan_measure = 0.0;
+		std::set<std::string> words1_set;
+		for(auto word: words1){
+			words1_set.insert(word);
+		}
+		for(auto word: words1_set){
+			jordan_measure += std::count(words1.begin(), words1.end(), word) + std::count(words2.begin(), words2.end(), word);
+		}
+		return 1.0*jordan_measure/(words1.size() + words2.size());
 	}
 	
 	double ComputeNgramJordanMeasure(const std::vector<std::string>& ngrams1, const std::vector<std::string>& ngrams2) const{
 		double ngram_jordan_measure = 0.0;
-		return ngram_jordan_measure;
+		std::set<std::string> ngrams1_set;
+		for(auto ngram: ngrams1){
+			ngrams1_set.insert(ngram);
+		}
+		for(auto ngram: ngrams1_set){
+			ngram_jordan_measure += std::count(ngrams1.begin(), ngrams1.end(), ngram) + std::count(ngrams2.begin(), ngrams2.end(), ngram);
+		}
+		return 1.0*ngram_jordan_measure/(ngrams1.size() + ngrams2.size());
 	}
 };
 

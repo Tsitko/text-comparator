@@ -18,7 +18,7 @@ void print(const std::map<std::string, std::set<int>>& s){
 }
 
 void print(ComparisonStatisctics s){
-	std::cout<<s.relevance<<" "<<s.ngram_relevance<<std::endl;
+	std::cout<<s.relevance<<" "<<s.ngram_relevance<<" "<<s.jordan_measure<<" "<<s.ngram_jordan_measure<<std::endl;
 }
 
 int main(){
