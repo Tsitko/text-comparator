@@ -67,10 +67,58 @@ void TestLine(){
 
 // -------------------------- Testing StopWords class ----------------------------------------------
 
+void TestStopWordsSplit(){
+	return;
+	//empty stop words
+	
+	//non-empty stop words
+}
+
+void TestStopWordsInit(){
+	return;
+	//stop words string
+	
+	//stop words string set
+	
+	//stop words vector
+}
+
+void TestStopWords(){
+	RUN_TEST(TestStopWordsSplit);
+	RUN_TEST(TestStopWordsInit);
+}
+
 // -------------------------- Testing TextComparator class ----------------------------------------------
+
+void TestTextComparatorRelevance(){
+	return;
+}
+
+void TestTextComparatorNgramRelevance(){
+	return;
+}
+
+void TestTextComparatorJordan(){
+	return;
+}
+
+void TestTextComparatorNgramJordan(){
+	return;
+}
+
+void TestTextComparator(){
+	RUN_TEST(TestTextComparatorRelevance);
+	RUN_TEST(TestTextComparatorNgramRelevance);
+	RUN_TEST(TestTextComparatorJordan);
+	RUN_TEST(TestTextComparatorNgramJordan);
+}
+
+// -------------------------- Run all tests ----------------------------------------------
 
 void TestAll(){
 	TestLine();
+	TestStopWords();
+	TestTextComparator();
 }
 
 
