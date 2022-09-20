@@ -18,13 +18,17 @@ public:
 		if(words_vec_.empty()){
 			for(const char c: clean_text){
 				if(c==' ' && !temp.empty()){
-					words_vec_.push_back(temp);
+					if(temp != " "){
+						words_vec_.push_back(temp);
+					}
 					temp="";
 				} else{
+				if(c!=' '){
 					temp+=c;
 				}
+				}
 			}
-			if(!temp.empty()){
+			if(!temp.empty() && temp != " "){
 				words_vec_.push_back(temp);
 			}
 		}

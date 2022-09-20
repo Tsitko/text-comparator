@@ -56,8 +56,20 @@ void TestLineSplitWords(){
 
 void TestLineValidation(){
 	// default validation
-	return;
+	{
+		Line line = Line("Haha & is here and ?!# also");
+		std::vector<std::string> v = {"haha", "is", "here", "and", "also"};
+		ASSERT_EQUAL_HINT(line.SplitWordsToVec(), v, "symbols like &?!# must be deleted");
+	}
 	// custom validation
+	{
+		std::set<char> valid_symbols;
+		valid_symbols.insert('&');
+		valid_symbols.insert('a');
+		Line line = Line("Haha & is here and ?!# also", valid_symbols);
+		std::vector<std::string> v = {"a", "a", "&", "a", "a"};
+		ASSERT_EQUAL_HINT(line.SplitWordsToVec(), v, "the only valid symbols are & and a");
+	}
 }
 
 void TestLine(){

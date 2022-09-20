@@ -27,8 +27,8 @@ int main(){
 	t_c.Feed("computer with 1tb ssd");
 	t_c.Feed("a bottle of whisky");
 	ComparisonStatisctics s1 = t_c.Compare("notebook with 512GB ssd", "computer with 1tb ssd");
-	ComparisonStatisctics s3 = t_c.Compare("cmputer with 512GB ssd", "computer with 1tb ssd");
-	ComparisonStatisctics s2 = t_c.Compare("notebook with 512GB ssd", "a bottle of whisky");
+	ComparisonStatisctics s2 = t_c.Compare("cmputer with 512GB ssd", "computer with 1tb ssd");
+	ComparisonStatisctics s3 = t_c.Compare("notebook with 512GB ssd", "a bottle of whisky");
 	print(s1);
 	print(s2);
 	print(s3);
