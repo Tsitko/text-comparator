@@ -4,7 +4,7 @@
 #include "TextComparator.cpp"
 
 
-inline const double EPSILON = 10e-6;
+const double EPSILON = 10e-6;
 
 // -------------------------- Testing Line class ----------------------------------------------
 
@@ -85,7 +85,7 @@ void TestLine(){
 
 
 void TestStopWordsSplit(){
-	return;
+
 	//empty stop words
 	{
 		StopWords sw = StopWords("");
@@ -143,13 +143,13 @@ void TestTextComparatorRelevance(){
 		ComparisonStatisctics stat = tc.Compare("A man with small but powerfull gun", "A man with the gun");
 		double relevance = stat.relevance;
 		double true_relevance = (1.0/2)*std::log(3.0/1) + (1.0/2)*std::log(3.0/2);
-		ASSERT(std::abs(relevance-true_relevance)<EPSILON);
+		ASSERT_HINT(std::abs(relevance-true_relevance)<EPSILON, std::to_string(relevance) + "-" + std::to_string(true_relevance));
 		
 		//2 same words, 3 words in second document
 		stat = tc.Compare("A man with small but powerfull gun", "The large powerfull gun");
 		relevance = stat.relevance;
 		true_relevance = (1.0/3)*std::log(3.0/1) + (1.0/3)*std::log(3.0/2);
-		ASSERT(std::abs(relevance-true_relevance)<EPSILON);
+		ASSERT_HINT(std::abs(relevance-true_relevance)<EPSILON, std::to_string(relevance) + "-" + std::to_string(true_relevance));
 		
 		//no same words
 		stat = tc.Compare("A man with small but powerfull gun", "A bottle of whisky");
@@ -160,7 +160,14 @@ void TestTextComparatorRelevance(){
 }
 
 void TestTextComparatorNgramRelevance(){
-	return;
+	TextComparator tc = TextComparator(std::string("a of in is the with"));
+	tc.Feed("A small computer"); // sma llc omp ute r mal lco mpu ter all com put er llc omp ute r lco mpu ter com put er omp ute r mpu ter put er ute r ter (33)
+	tc.Feed("The notebook"); // not ebo ok ote boo k teb ook ...
+	
+	ComparisonStatisctics stat = tc.Compare("The large cmputer", "A small computer"); // lar gec mpu ter arg ecm put er rge cmp ute r gec mpu ter ecm put er cmp ute r mpu ter put er ute r ter (28)
+	double relevance = stat.ngram_relevance;
+	double true_relevance = (3.0/33)*std::log(2.0/1)*3*2 + (4.0/33)*std::log(2.0/1)*3*4; // mpu*3;3 ter*4;4 put*3;3 er*3;3 ute*4;3 r*4;3
+	ASSERT_HINT(std::abs(relevance-true_relevance)<EPSILON, std::to_string(relevance) + "-" + std::to_string(true_relevance));
 }
 
 void TestTextComparatorJordan(){
