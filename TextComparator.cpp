@@ -47,8 +47,7 @@ class TextComparator{
 public:
 	explicit TextComparator(const std::string& stop_words_string){
 		SetValidSymbols();
-		Line stop_words_line = Line(stop_words_string, valid_symbols_);
-		stop_words_= StopWords(stop_words_line);
+		stop_words_= StopWords(stop_words_string, valid_symbols_);
 	}
 	
 	template <typename StringContainer>

@@ -88,9 +88,7 @@ void TestStopWordsSplit(){
 	return;
 	//empty stop words
 	{
-		std::string s = "";
-		Line s_line = Line(s);
-		StopWords sw = StopWords(s_line);
+		StopWords sw = StopWords("");
 		std::string to_clean = "a small mouse in the house";
 		std::vector<std::string> v;
 		v={"a", "small", "mouse", "in", "the", "house"};
@@ -101,11 +99,28 @@ void TestStopWordsSplit(){
 	//non-empty stop words
 	{
 		std::string s = "a in is the with";
-		Line s_line = Line(s);
-		StopWords sw = StopWords(s_line);
+		StopWords sw = StopWords(s);
 		std::string to_clean = "a small mouse in the house";
 		std::vector<std::string> v;
 		v={"small", "mouse", "house"};
+		Line to_clean_line = Line(to_clean);
+		ASSERT_EQUAL_HINT(sw.SplitnIntoWordsNoStop(to_clean_line), v, "stop words are " + s);
+	}
+	{
+		std::string s = "a of in is the with";
+		StopWords sw = StopWords(s);
+		std::string to_clean = "A man with the gun";
+		std::vector<std::string> v;
+		v={"man", "gun"};
+		Line to_clean_line = Line(to_clean);
+		ASSERT_EQUAL_HINT(sw.SplitnIntoWordsNoStop(to_clean_line), v, "stop words are " + s);
+	}
+	{
+		std::string s = "a of in is the with";
+		StopWords sw = StopWords(s);
+		std::string to_clean = "A man with small but powerfull gun";
+		std::vector<std::string> v;
+		v={"man", "small", "but", "powerfull", "gun"};
 		Line to_clean_line = Line(to_clean);
 		ASSERT_EQUAL_HINT(sw.SplitnIntoWordsNoStop(to_clean_line), v, "stop words are " + s);
 	}
@@ -119,19 +134,18 @@ void TestStopWords(){
 
 void TestTextComparatorRelevance(){
 	{
-		std::string stop_words = "a of in is the with";
-		TextComparator tc = TextComparator(stop_words);
+		TextComparator tc = TextComparator(std::string("a of in is the with"));
 		tc.Feed("A man with the gun");
 		tc.Feed("The large powerfull gun");
 		tc.Feed("A bottle of whisky");
 		ComparisonStatisctics stat = tc.Compare("A man with small but powerfull gun", "A man with the gun");
 		double relevance = stat.relevance;
-		double true_relevance = (1.0/2)*std::log(3.0/2) + (1.0/2)*std::log(3.0/2);
-		std::cout<<true_relevance<<" "<<relevance<<std::endl;
+		double true_relevance = (1.0/2)*std::log(3.0/1) + (1.0/2)*std::log(3.0/2);
 		ASSERT(std::abs(relevance-true_relevance)<EPSILON);
 		stat = tc.Compare("A man with small but powerfull gun", "The large powerfull gun");
 		relevance = stat.relevance;
-		ASSERT(std::abs(relevance-0)<EPSILON);
+		true_relevance = (1.0/3)*std::log(3.0/1) + (1.0/3)*std::log(3.0/2);
+		ASSERT(std::abs(relevance-true_relevance)<EPSILON);
 		stat = tc.Compare("A man with small but powerfull gun", "A bottle of whisky");
 		relevance = stat.relevance;
 		ASSERT_EQUAL(relevance,0);

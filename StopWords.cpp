@@ -11,8 +11,13 @@ class StopWords{
 public:
 	StopWords(){}
 	
-	StopWords(Line& line){
-		stop_words_line_=line;
+	StopWords(const std::string& line){
+		stop_words_line_=Line(line);
+		stop_words_set_ = stop_words_line_.SplitWordsToSet();
+	}
+	
+	StopWords(const std::string& line, const std::set<char> valid_symbols){
+		stop_words_line_=Line(line, valid_symbols);
 		stop_words_set_ = stop_words_line_.SplitWordsToSet();
 	}
 	
