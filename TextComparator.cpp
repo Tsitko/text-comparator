@@ -114,8 +114,8 @@ private:
 		for(const std::string& word: stop_words_.SplitnIntoWordsNoStop(text)){
 			ngram_string += word;
 		}
-		std::string temp = "";
 		for(int i=0; i<ngram_string.size()- NGRAM_SIZE; ++i){
+			std::string temp = "";
 			for(const char c: ngram_string.substr(i, ngram_string.size()-i)){
 				if(temp.size() == NGRAM_SIZE){
 					result.push_back(temp);
@@ -208,6 +208,7 @@ private:
 			ngrams1_set.insert(ngram);
 		}
 		for(auto ngram: ngrams1_set){
+			//std::cout<<ngram<<"   "<<std::count(ngrams1.begin(), ngrams1.end(), ngram)<<"   "<<std::count(ngrams2.begin(), ngrams2.end(), ngram)<<std::endl;
 			ngram_jordan_measure += std::count(ngrams1.begin(), ngrams1.end(), ngram) + std::count(ngrams2.begin(), ngrams2.end(), ngram);
 		}
 		return 1.0*ngram_jordan_measure/(ngrams1.size() + ngrams2.size());

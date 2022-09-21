@@ -166,16 +166,31 @@ void TestTextComparatorNgramRelevance(){
 	
 	ComparisonStatisctics stat = tc.Compare("The large cmputer", "A small computer"); // lar gec mpu ter arg ecm put er rge cmp ute r gec mpu ter ecm put er cmp ute r mpu ter put er ute r ter (28)
 	double relevance = stat.ngram_relevance;
-	double true_relevance = (3.0/33)*std::log(2.0/1)*3*2 + (4.0/33)*std::log(2.0/1)*3*4; // mpu*3;3 ter*4;4 put*3;3 er*3;3 ute*4;3 r*4;3
+	double true_relevance = (3.0/33)*std::log(2.0/1)*3*2 + (4.0/33)*std::log(2.0/1)*3*4; // mpu*3;3 ter*4;4 put*3;3 er*3;3 ute*3;4 r*3;4
 	ASSERT_HINT(std::abs(relevance-true_relevance)<EPSILON, std::to_string(relevance) + "-" + std::to_string(true_relevance));
 }
 
 void TestTextComparatorJordan(){
-	return;
+	TextComparator tc = TextComparator(std::string("a of in is the with"));
+	tc.Feed("A man with the gun");
+	tc.Feed("The large powerfull gun");
+	tc.Feed("A bottle of whisky");
+	
+	ComparisonStatisctics stat = tc.Compare("A man with small but powerfull gun", "A man with the gun");
+	double jordan = stat.jordan_measure;
+	double true_jordan = 1.0*(2+1+1+1+2)/(5+2);
+	ASSERT_HINT(std::abs(jordan-true_jordan)<EPSILON, std::to_string(jordan) + "-" + std::to_string(true_jordan));
 }
 
 void TestTextComparatorNgramJordan(){
-	return;
+	TextComparator tc = TextComparator(std::string("a of in is the with"));
+	tc.Feed("A small computer"); // sma llc omp ute r mal lco mpu ter all com put er llc omp ute r lco mpu ter com put er omp ute r mpu ter put er ute r ter (33)
+	tc.Feed("The notebook"); // not ebo ok ote boo k teb ook ...
+	
+	ComparisonStatisctics stat = tc.Compare("The large cmputer", "A small computer"); // lar gec mpu ter arg ecm put er rge cmp ute r gec mpu ter ecm put er cmp ute r mpu ter put er ute r ter (28)
+	double jordan = stat.ngram_jordan_measure; 
+	double true_jordan = 1.0*(1+2+6+8+1+2+6+6+1+2+7+7)/(28+33); //lar 1+0 gec 2+0 mpu 3+3 ter 4+4 arg 1+0 ecm 2+0 put 3+3 er 3+3 rge 1+0 cmp 2+0 ute 3+4 r 3+4 
+	ASSERT_HINT(std::abs(jordan-0)<EPSILON, std::to_string(jordan) + "-" + std::to_string(true_jordan));
 }
 
 void TestTextComparator(){
@@ -195,5 +210,6 @@ void TestAll(){
 
 
 int main(){
+	
 	TestAll();
 }
