@@ -138,14 +138,20 @@ void TestTextComparatorRelevance(){
 		tc.Feed("A man with the gun");
 		tc.Feed("The large powerfull gun");
 		tc.Feed("A bottle of whisky");
+		
+		//2 same words, 2 words in second document
 		ComparisonStatisctics stat = tc.Compare("A man with small but powerfull gun", "A man with the gun");
 		double relevance = stat.relevance;
 		double true_relevance = (1.0/2)*std::log(3.0/1) + (1.0/2)*std::log(3.0/2);
 		ASSERT(std::abs(relevance-true_relevance)<EPSILON);
+		
+		//2 same words, 3 words in second document
 		stat = tc.Compare("A man with small but powerfull gun", "The large powerfull gun");
 		relevance = stat.relevance;
 		true_relevance = (1.0/3)*std::log(3.0/1) + (1.0/3)*std::log(3.0/2);
 		ASSERT(std::abs(relevance-true_relevance)<EPSILON);
+		
+		//no same words
 		stat = tc.Compare("A man with small but powerfull gun", "A bottle of whisky");
 		relevance = stat.relevance;
 		ASSERT_EQUAL(relevance,0);
