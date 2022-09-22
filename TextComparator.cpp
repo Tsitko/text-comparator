@@ -133,7 +133,6 @@ private:
 				result.push_back(temp);
 			}
 		}
-		
 		return result;
 	}
 	
