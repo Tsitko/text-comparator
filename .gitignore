@@ -6,3 +6,4 @@ tests.exe
 *.exe
 .vscode/tasks.json
 .vscode/launch.json
+.vscode/settings.json

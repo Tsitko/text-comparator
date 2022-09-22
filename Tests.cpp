@@ -4,6 +4,7 @@
 #include "Line.cpp"
 #include "StopWords.cpp"
 #include "TextComparator.cpp"
+#include <random>
 
 const double EPSILON = 10e-6;
 
@@ -201,6 +202,41 @@ void TestTextComparator(){
 	RUN_TEST(TestTextComparatorNgramJordan);
 }
 
+// -------------------------- Speed test ----------------------------------------------
+
+std::string random_string(std::string::size_type length)
+{
+    static auto& chrs = "0123456789"
+        "abcdefghijklmnopqrstuvwxyz"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    thread_local static std::mt19937 rg{std::random_device{}()};
+    thread_local static std::uniform_int_distribution<std::string::size_type> pick(0, sizeof(chrs) - 2);
+
+    std::string s;
+
+    s.reserve(length);
+
+    while(length--)
+        s += chrs[pick(rg)];
+
+    return s;
+}
+
+std::string random_string_with_spaces(){
+	std::string result;
+	for(int i=1; i<10; ++i){
+		result += random_string(i) + " ";
+	}
+	return result;
+}
+
+void SpeedTest(){
+	for(int i=0; i<10; ++i){
+		std::cout<<random_string_with_spaces()<<std::endl;
+	}
+}
+
 // -------------------------- Run all tests ----------------------------------------------
 
 void TestAll(){
@@ -211,6 +247,6 @@ void TestAll(){
 
 
 int main(){
-	
+	SpeedTest();
 	TestAll();
 }
