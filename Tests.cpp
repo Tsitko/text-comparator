@@ -1,8 +1,9 @@
+#define NGRAM_SIZE 3
+
 #include "TestingFramework.cpp"
 #include "Line.cpp"
 #include "StopWords.cpp"
 #include "TextComparator.cpp"
-
 
 const double EPSILON = 10e-6;
 
