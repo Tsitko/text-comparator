@@ -12,12 +12,12 @@ public:
 	StopWords(){}
 	
 	StopWords(const std::string& line){
-		stop_words_line_=Line(line);
+		stop_words_line_ = Line(line);
 		stop_words_set_ = stop_words_line_.SplitWordsToSet();
 	}
 	
 	StopWords(const std::string& line, const std::set<char> valid_symbols){
-		stop_words_line_=Line(line, valid_symbols);
+		stop_words_line_ = Line(line, valid_symbols);
 		stop_words_set_ = stop_words_line_.SplitWordsToSet();
 	}
 	
@@ -32,6 +32,6 @@ public:
 	}
 	
 private:
-	Line stop_words_line_=Line();
+	Line stop_words_line_ = Line();
 	std::set<std::string> stop_words_set_;
 };
