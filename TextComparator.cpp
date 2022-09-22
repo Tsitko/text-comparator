@@ -195,7 +195,7 @@ private:
 			words1_set.insert(word);
 		}
 		for(auto word: words1_set){
-			jordan_measure += std::count(words1.begin(), words1.end(), word) + std::count(words2.begin(), words2.end(), word);
+			jordan_measure += std::count(words2.begin(), words2.end(), word);
 		}
 		return 1.0*jordan_measure/(words1.size() + words2.size());
 	}
@@ -208,7 +208,7 @@ private:
 		}
 		for(auto ngram: ngrams1_set){
 			//std::cout<<ngram<<"   "<<std::count(ngrams1.begin(), ngrams1.end(), ngram)<<"   "<<std::count(ngrams2.begin(), ngrams2.end(), ngram)<<std::endl;
-			ngram_jordan_measure += std::count(ngrams1.begin(), ngrams1.end(), ngram) + std::count(ngrams2.begin(), ngrams2.end(), ngram);
+			ngram_jordan_measure += std::count(ngrams2.begin(), ngrams2.end(), ngram);
 		}
 		return 1.0*ngram_jordan_measure/(ngrams1.size() + ngrams2.size());
 	}

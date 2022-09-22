@@ -178,7 +178,7 @@ void TestTextComparatorJordan(){
 	
 	ComparisonStatisctics stat = tc.Compare("A man with small but powerfull gun", "A man with the gun");
 	double jordan = stat.jordan_measure;
-	double true_jordan = 1.0*(2+1+1+1+2)/(5+2);
+	double true_jordan = 1.0*(1+1)/(5+2);
 	ASSERT_HINT(std::abs(jordan-true_jordan)<EPSILON, std::to_string(jordan) + "-" + std::to_string(true_jordan));
 }
 
@@ -189,7 +189,7 @@ void TestTextComparatorNgramJordan(){
 	
 	ComparisonStatisctics stat = tc.Compare("The large cmputer", "A small computer"); // lar gec mpu ter arg ecm put er rge cmp ute r gec mpu ter ecm put er cmp ute r mpu ter put er ute r (27)
 	double jordan = stat.ngram_jordan_measure; 
-	double true_jordan = 1.0*(1+2+6+6+1+2+6+1+2+7+6+7)/(32+27); //lar 1+0 gec 2+0 mpu 3+3 ter 3+3 arg 1+0 ecm 2+0 put 3+3 rge 1+0 cmp 2+0 ute 3+4 er 3+3 r 3+4
+	double true_jordan = 1.0*(3+3+3+4+3+4)/(32+27); //mpu 3 ter 3 put 3 ute 4 er 3 r 4
 	ASSERT_HINT(std::abs(jordan-true_jordan)<EPSILON, std::to_string(jordan) + "-" + std::to_string(true_jordan));
 }
 
