@@ -71,7 +71,8 @@ and
 ```  
 ("cmputer with 512GB ssd", "computer with 1tb ssd")  
 ```
-are the same. But ngram_relevances are different. Thats because we made a typo in word "computer" and simple relevance can do nothing with that. But ngram_relevance can deal with such typos.
+are the same. But ngram_relevances are different. Thats because we made a typo in word "computer" and simple relevance can do nothing with that. But ngram_relevance can deal with such typos.  
+By default ngram size is 3. But you can redefine it before inclusion of TextComparator.cpp.
 ### jordan_measure  
 A jordan_measure is the size of intersection of two sets devided by the size of its union.  
 ### ngram_jordan_measure  
