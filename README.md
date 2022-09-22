@@ -35,7 +35,7 @@ relevance = 0 ngram_relevance = 0 jordan_measure = 0 ngram_jordan_measure = 0
 ## Explanation:  
 First we are creating a _TextComparator_ object. It is initializing with stop words (words which will be deleted from the texts we will try to compare).  
 After it was created we need to _Feed_ it with texts (for example with all the descriptions of the products we have in our shop).  
-And after that TextComparator we can _Compare_ texts and get _ComparisonStatisctics_ structure as a result.  
+And after that we can _Compare_ texts and get _ComparisonStatisctics_ structure as a result.  
 
 The ComparisonStatisctics structure is the following:  
 ```cpp
