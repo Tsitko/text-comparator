@@ -5,3 +5,4 @@ a.exe
 tests.exe
 *.exe
 .vscode/tasks.json
+.vscode/launch.json
