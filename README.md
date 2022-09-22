@@ -60,7 +60,7 @@ struct ComparisonStatisctics{
 ```
 
 ### relevance  
-A simpl TF*IDF for all the matched words in texts which we are trying to compare.  
+A simple TF*IDF for all the matched words in texts which we are trying to compare.  
 ### ngram_relevance  
 The same as relevance, but for ngrams (ngrams for word "computer" are [com, put, er, omp, ute, r, mpu, ter, put, er, ute, r, ter]).  
 As we can see relevances for texts  
