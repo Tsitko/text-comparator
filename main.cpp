@@ -1,25 +1,12 @@
 #include "TextComparator.cpp"
 
-void print(const std::vector<std::string>& s){
-	for(const std::string w: s){
-		std::cout<<w<<" ";
-	}
-	std::cout<<std::endl;
+void print(ComparisonStatisctics s){ // printing ComparisonStatisctics
+	std::cout<<"relevance = "<<s.relevance<< " "
+	<<"ngram_relevance = "<<s.ngram_relevance<<" "
+	<<"jordan_measure = "<<s.jordan_measure<<" "
+	<<"ngram_jordan_measure = "<<s.ngram_jordan_measure<<std::endl;
 }
 
-void print(const std::map<std::string, std::set<int>>& s){
-	for(const auto [w, m]: s){
-		std::cout<<w<<": ";
-		for(int i: m){
-			std::cout<<i<<" ";
-		}
-	}
-	std::cout<<std::endl;
-}
-
-void print(ComparisonStatisctics s){
-	std::cout<<s.relevance<<" "<<s.ngram_relevance<<" "<<s.jordan_measure<<" "<<s.ngram_jordan_measure<<std::endl;
-}
 
 int main(){
 	std::string s= "in the as a is am are with";
