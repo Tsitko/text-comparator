@@ -14,17 +14,17 @@ public:
 	
 	std::vector<std::string> SplitWordsToVec() {
 		std::string clean_text = ClearText(line_);
-		std::string temp="";
+		std::string temp = "";
 		if(words_vec_.empty()){
 			for(const char c: clean_text){
-				if(c==' ' && !temp.empty()){
+				if(c == ' ' && !temp.empty()){
 					if(temp != " "){
 						words_vec_.push_back(temp);
 					}
-					temp="";
+					temp = "";
 				} else{
 				if(c!=' '){
-					temp+=c;
+					temp += c;
 				}
 				}
 			}
@@ -38,7 +38,7 @@ public:
 	std::set<std::string> SplitWordsToSet() {
 		if(words_set_.empty()){
 			for(const std::string& word: SplitWordsToVec()){
-			words_set_.insert(word);
+				words_set_.insert(word);
 			}
 		}
 		
@@ -69,7 +69,7 @@ private:
 	
 	
 	std::string ClearText(const std::string& text, char replacement = ' ') {
-		std::string clean_text="";
+		std::string clean_text = "";
 		for(const char c: text){
 			if(IsValidSymbol(c)){
 				clean_text += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));

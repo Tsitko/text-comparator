@@ -47,7 +47,7 @@ class TextComparator{
 public:
 	explicit TextComparator(const std::string& stop_words_string){
 		SetValidSymbols();
-		stop_words_= StopWords(stop_words_string, valid_symbols_);
+		stop_words_ = StopWords(stop_words_string, valid_symbols_);
 	}
 	
 	template <typename StringContainer>
@@ -62,7 +62,7 @@ public:
 	
 	void Feed(const std::string& text){
 		++texts_id_;
-		Line text_line= Line(text, valid_symbols_);
+		Line text_line = Line(text, valid_symbols_);
 		std::vector<std::string> words = SplitnIntoWordsNoStop(text_line);
 		for(const std::string& word: words){
 			words_to_texts_[word].insert(texts_id_);
@@ -75,8 +75,8 @@ public:
 	
 	ComparisonStatisctics Compare(const std::string& text1, const std::string& text2){
 		ComparisonStatisctics result;
-		Line text_line1= Line(text1, valid_symbols_);
-		Line text_line2= Line(text2, valid_symbols_);
+		Line text_line1 = Line(text1, valid_symbols_);
+		Line text_line2 = Line(text2, valid_symbols_);
 		result.relevance = ComputeRelevance(SplitnIntoWordsNoStop(text_line1), SplitnIntoWordsNoStop(text_line2));
 		result.ngram_relevance = ComputeNgramRelevance(SplitnIntoNgramsNoStop(text_line1), SplitnIntoNgramsNoStop(text_line2));
 		result.jordan_measure = ComputeJordanMeasure(SplitnIntoWordsNoStop(text_line1), SplitnIntoWordsNoStop(text_line2));
@@ -89,7 +89,7 @@ private:
 	std::map<std::string, std::set<int>> ngrams_to_texts_;
 	StopWords stop_words_;
 	std::set<char> valid_symbols_;
-	int texts_id_=0;
+	int texts_id_ = 0;
 		
 	void SetValidSymbols(){
 		valid_symbols_.insert(static_cast<char>(32)); // space
@@ -119,14 +119,9 @@ private:
 			for(const char c: ngram_string.substr(i, ngram_string.size()-i)){
 				if(temp.size() == NGRAM_SIZE){
 					result.push_back(temp);
-					temp = "";
-					if(c!=' '){
-						temp += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
-					}
+					temp = c;
 				} else{
-					if(c!=' '){
-						temp += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
-					}
+					temp += c;
 				}
 			}
 			if(!temp.empty()){
