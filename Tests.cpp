@@ -176,20 +176,20 @@ void TestTextComparatorJordan(){
 	tc.Feed("The large powerfull gun");
 	tc.Feed("A bottle of whisky");
 	
-	ComparisonStatisctics stat = tc.Compare("A man with small but powerfull gun", "A man with the gun");
+	ComparisonStatisctics stat = tc.Compare("A man with small but powerfull gun", "A man with the gun");// {man, small, but, powerfull, gun}(5) {man, gun}(2)
 	double jordan = stat.jordan_measure;
-	double true_jordan = 1.0*(1+1)/(5+2);
+	double true_jordan = 1.0*(1+1)/(5+2-2);
 	ASSERT_HINT(std::abs(jordan-true_jordan)<EPSILON, std::to_string(jordan) + "-" + std::to_string(true_jordan));
 }
 
 void TestTextComparatorNgramJordan(){
 	TextComparator tc = TextComparator(std::string("a of in is the with"));
-	tc.Feed("A small computer"); // sma llc omp ute r mal lco mpu ter all com put er llc omp ute r lco mpu ter com put er omp ute r mpu ter put er ute r (32)
+	tc.Feed("A small computer"); // sma llc omp ute r mal lco mpu ter all com put er (13)
 	tc.Feed("The notebook"); // not ebo ok ote boo k teb ook ebo ok boo k
 	
-	ComparisonStatisctics stat = tc.Compare("The large cmputer", "A small computer"); // lar gec mpu ter arg ecm put er rge cmp ute r gec mpu ter ecm put er cmp ute r mpu ter put er ute r (27)
+	ComparisonStatisctics stat = tc.Compare("The large cmputer", "A small computer"); // lar gec mpu ter arg ecm put er rge cmp ute r (12)
 	double jordan = stat.ngram_jordan_measure; 
-	double true_jordan = 1.0*(3+3+3+4+3+4)/(32+27); //mpu 3 ter 3 put 3 ute 4 er 3 r 4
+	double true_jordan = 1.0*(6)/(13+12-6); //mpu ter put ute er r (6)
 	ASSERT_HINT(std::abs(jordan-true_jordan)<EPSILON, std::to_string(jordan) + "-" + std::to_string(true_jordan));
 }
 
