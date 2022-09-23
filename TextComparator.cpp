@@ -187,9 +187,6 @@ private:
 		double intersection = 0.0;
 		std::set<std::string> words1_set(words1.begin(), words1.end());
 		std::set<std::string> words2_set(words2.begin(), words2.end());
-		for(auto word: words1){
-			words1_set.insert(word);
-		}
 		for(auto word: words1_set){
 			intersection += words2_set.count(word);
 		}
