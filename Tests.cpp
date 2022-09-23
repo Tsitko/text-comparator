@@ -7,6 +7,7 @@
 #include <random>
 #include <chrono>
 
+//to compare doubles
 const double EPSILON = 10e-6;
 //for speed test
 const int WORDS_IN_TEXT = 10;
