@@ -5,8 +5,13 @@
 #include "StopWords.cpp"
 #include "TextComparator.cpp"
 #include <random>
+#include <chrono>
 
 const double EPSILON = 10e-6;
+//for speed test
+const int WORDS_IN_TEXT = 50;
+const int NUM_TEXTS = 10000;
+const int WORD_SIZE = 6;
 
 // -------------------------- Testing Line class ----------------------------------------------
 
@@ -225,16 +230,26 @@ std::string random_string(std::string::size_type length)
 
 std::string random_string_with_spaces(){
 	std::string result;
-	for(int i=1; i<10; ++i){
-		result += random_string(i) + " ";
+	for(int i=1; i<=WORDS_IN_TEXT; ++i){
+		result += random_string(WORD_SIZE) + " ";
 	}
 	return result;
 }
 
 void SpeedTest(){
-	for(int i=0; i<10; ++i){
-		std::cout<<random_string_with_spaces()<<std::endl;
+	TextComparator tc = TextComparator(std::string("a of in is the with"));
+	auto startTime = std::chrono::system_clock::now();
+	int count = 1;
+	for(int i=1; i<=NUM_TEXTS; ++i){
+		tc.Feed(random_string_with_spaces());
+		if(i%(NUM_TEXTS/10)==0){
+			std::cerr<<10*count<<"%"<<std::endl;
+			++count;
+		}
 	}
+	auto endTime = std::chrono::system_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
+	std::cerr<<NUM_TEXTS<<" texts with "<<WORDS_IN_TEXT<<" words in each text were added in "<<std::to_string(duration)<<" ms"<<std::endl;
 }
 
 // -------------------------- Run all tests ----------------------------------------------
@@ -247,6 +262,7 @@ void TestAll(){
 
 
 int main(){
-	SpeedTest();
 	TestAll();
+	std::cerr<<"----Running speed test----"<<std::endl;
+	SpeedTest();
 }
