@@ -9,7 +9,7 @@
 
 const double EPSILON = 10e-6;
 //for speed test
-const int WORDS_IN_TEXT = 50;
+const int WORDS_IN_TEXT = 30;
 const int NUM_TEXTS = 10000;
 const int WORD_SIZE = 6;
 
@@ -238,11 +238,23 @@ std::string random_string_with_spaces(){
 
 void SpeedTest(){
 	TextComparator tc = TextComparator(std::string("a of in is the with"));
-	auto startTime = std::chrono::system_clock::now();
+	std::cerr<<"--- Generating texts ---"<<std::endl;
 	int count = 1;
+	std::vector<std::string> texts_to_feed;
 	for(int i=1; i<=NUM_TEXTS; ++i){
-		tc.Feed(random_string_with_spaces());
+		texts_to_feed.push_back(random_string_with_spaces());
 		if(i%(NUM_TEXTS/10)==0){
+			std::cerr<<10*count<<"%"<<std::endl;
+			++count;
+		}
+	}
+
+	std::cerr<<"--- Adding texts ---"<<std::endl;
+	count = 1;
+	auto startTime = std::chrono::system_clock::now();
+	for(int i=0; i<texts_to_feed.size(); ++i){
+		tc.Feed(texts_to_feed[i]);
+		if((i+1)%(NUM_TEXTS/10)==0){
 			std::cerr<<10*count<<"%"<<std::endl;
 			++count;
 		}
@@ -250,6 +262,22 @@ void SpeedTest(){
 	auto endTime = std::chrono::system_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
 	std::cerr<<NUM_TEXTS<<" texts with "<<WORDS_IN_TEXT<<" words in each text were added in "<<std::to_string(duration)<<" ms"<<std::endl;
+
+	std::cerr<<"--- Comparing texts ---"<<std::endl;
+	startTime = std::chrono::system_clock::now();
+	count = 1;
+	for(int i=1; i<=NUM_TEXTS; ++i){
+		tc.Compare("aas dfdf cvfv HFJK cdKJD 123jj", "SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48 SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48"
+					"SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48"
+					"SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48");
+		if(i%(NUM_TEXTS/10)==0){
+			std::cerr<<10*count<<"%"<<std::endl;
+			++count;
+		}
+	}
+	endTime = std::chrono::system_clock::now();
+	duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
+	std::cerr<<NUM_TEXTS<<" text pairs were compared in "<<std::to_string(duration)<<" ms"<<std::endl;
 }
 
 // -------------------------- Run all tests ----------------------------------------------
