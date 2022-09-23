@@ -1,5 +1,6 @@
 #include <set>
 #include <string>
+#include <vector>
 
 #ifndef LINE
 #include "Line.cpp"

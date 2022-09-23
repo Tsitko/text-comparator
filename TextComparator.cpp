@@ -1,10 +1,5 @@
 #include <cmath>
-#include <map>
-#include <set>
-#include <string>
-#include <vector>
 #include <numeric>
-#include <iostream>
 #include <algorithm>
 
 #ifndef LINE
