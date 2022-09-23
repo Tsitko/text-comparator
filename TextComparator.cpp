@@ -10,15 +10,14 @@
 #ifndef LINE
 #include "Line.cpp"
 #endif
+
 #ifndef STOPWORDS
 #include "StopWords.cpp"
 #endif
 
-
 #ifndef NGRAM_SIZE
 #define NGRAM_SIZE 3
 #endif
-
 
 struct ComparisonStatisctics{
 	ComparisonStatisctics(){}
@@ -38,10 +37,6 @@ struct ComparisonStatisctics{
 	double jordan_measure = 0.0;
 	double ngram_jordan_measure = 0.0;
 };
-
-
-
-
 
 class TextComparator{
 public:
