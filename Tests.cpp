@@ -10,7 +10,7 @@
 const double EPSILON = 10e-6;
 //for speed test
 const int WORDS_IN_TEXT = 10;
-const int NUM_TEXTS = 100;
+const int NUM_TEXTS = 1000;
 const int WORD_SIZE = 6;
 
 // -------------------------- Testing Line class ----------------------------------------------
@@ -238,41 +238,38 @@ std::string random_string_with_spaces(){
 
 void SpeedTest(){
 	TextComparator tc = TextComparator(std::string("a of in is the with"));
-	std::cerr<<"--- Generating texts ---"<<std::endl;
-	int count = 1;
+	std::cerr<<"--- Generating texts ---"<<std::endl<<std::endl;
 	std::vector<std::string> texts_to_feed;
 	for(int i=1; i<=NUM_TEXTS; ++i){
 		texts_to_feed.push_back(random_string_with_spaces());
-		if(i%(NUM_TEXTS/10)==0){
-			std::cerr<<10*count<<"%"<<std::endl;
-			++count;
+		if(i%(NUM_TEXTS/100)==0){
+			std::cerr<<"|";
 		}
 	}
+	std::cerr<<std::endl<<std::endl;
 
-	std::cerr<<"--- Adding texts ---"<<std::endl;
-	count = 1;
+	std::cerr<<"--- Adding texts ---"<<std::endl<<std::endl;
 	auto startTime = std::chrono::system_clock::now();
 	for(int i=0; i<texts_to_feed.size(); ++i){
 		tc.Feed(texts_to_feed[i]);
-		if((i+1)%(NUM_TEXTS/10)==0){
-			std::cerr<<10*count<<"%"<<std::endl;
-			++count;
+		if(i%(NUM_TEXTS/100)==0){
+			std::cerr<<"|";
 		}
 	}
+	std::cerr<<std::endl<<std::endl;
 	auto endTime = std::chrono::system_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
-	std::cerr<<NUM_TEXTS<<" texts with "<<WORDS_IN_TEXT<<" words in each text were added in "<<std::to_string(duration)<<" ms"<<std::endl;
+	std::cerr<<NUM_TEXTS<<" texts with "<<WORDS_IN_TEXT<<" words in each text were added in "<<std::to_string(duration)<<" ms"<<std::endl<<std::endl;
 
-	std::cerr<<"--- Comparing texts ---"<<std::endl;
+	std::cerr<<"--- Comparing texts ---"<<std::endl<<std::endl;
 	startTime = std::chrono::system_clock::now();
-	count = 1;
 	for(int i=1; i<=NUM_TEXTS; ++i){
 		tc.Compare(texts_to_feed[i - 1], texts_to_feed[texts_to_feed.size() - i]);
-		if(i%(NUM_TEXTS/10)==0){
-			std::cerr<<10*count<<"%"<<std::endl;
-			++count;
+		if(i%(NUM_TEXTS/100)==0){
+			std::cerr<<"|";
 		}
 	}
+	std::cerr<<std::endl<<std::endl;
 	endTime = std::chrono::system_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
 	std::cerr<<NUM_TEXTS<<" text pairs were compared in "<<std::to_string(duration)<<" ms"<<std::endl;
@@ -289,6 +286,6 @@ void TestAll(){
 
 int main(){
 	TestAll();
-	std::cerr<<"----Running speed test----"<<std::endl;
+	std::cerr<<"----Running speed test----"<<std::endl<<std::endl;
 	SpeedTest();
 }
