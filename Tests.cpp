@@ -9,8 +9,8 @@
 
 const double EPSILON = 10e-6;
 //for speed test
-const int WORDS_IN_TEXT = 30;
-const int NUM_TEXTS = 10000;
+const int WORDS_IN_TEXT = 10;
+const int NUM_TEXTS = 100;
 const int WORD_SIZE = 6;
 
 // -------------------------- Testing Line class ----------------------------------------------
