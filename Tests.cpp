@@ -267,9 +267,7 @@ void SpeedTest(){
 	startTime = std::chrono::system_clock::now();
 	count = 1;
 	for(int i=1; i<=NUM_TEXTS; ++i){
-		tc.Compare("aas dfdf cvfv HFJK cdKJD 123jj", "SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48 SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48"
-					"SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48"
-					"SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48SKJm, cdjkzdf skfcvois sdfhLZSNzeil28n sio48");
+		tc.Compare(texts_to_feed[i - 1], texts_to_feed[texts_to_feed.size() - i]);
 		if(i%(NUM_TEXTS/10)==0){
 			std::cerr<<10*count<<"%"<<std::endl;
 			++count;
