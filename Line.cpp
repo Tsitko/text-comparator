@@ -74,7 +74,9 @@ private:
 			if(IsValidSymbol(c)){
 				clean_text += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
 			} else{
-				clean_text += replacement;
+				if(!clean_text.empty() && clean_text[clean_text.size()-1] != replacement){
+					clean_text += replacement;
+				}
 			}
 		}
 		return clean_text;
