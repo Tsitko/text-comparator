@@ -13,7 +13,7 @@ public:
 	explicit Line(const std::string& text, const std::set<char> valid_symbols): line_(text), valid_symbols_(valid_symbols){}
 	
 	std::vector<std::string> SplitWordsToVec() {
-		std::string clean_text = ClearText(line_);
+		std::string clean_text = std::move(ClearText(line_));
 		std::string temp = "";
 		if(words_vec_.empty()){
 			for(const char c: clean_text){

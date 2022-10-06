@@ -37,7 +37,7 @@ class TextComparator{
 public:
 	explicit TextComparator(const std::string& stop_words_string){
 		SetValidSymbols();
-		stop_words_ = StopWords(stop_words_string, valid_symbols_);
+		stop_words_ = std::move(StopWords(stop_words_string, valid_symbols_));
 	}
 	
 	template <typename StringContainer>
@@ -52,12 +52,12 @@ public:
 	
 	void Feed(const std::string& text){
 		++texts_id_;
-		Line text_line = Line(text, valid_symbols_);
-		std::vector<std::string> words = SplitnIntoWordsNoStop(text_line);
+		Line text_line = std::move(Line(text, valid_symbols_));
+		std::vector<std::string> words = std::move(SplitnIntoWordsNoStop(text_line));
 		for(const std::string& word: words){
 			words_to_texts_[word].insert(texts_id_);
 		}
-		std::vector<std::string> ngrams = SplitnIntoNgramsNoStop(text_line);
+		std::vector<std::string> ngrams = std::move(SplitnIntoNgramsNoStop(text_line));
 		for(const std::string& ngram: ngrams){
 			ngrams_to_texts_[ngram].insert(texts_id_);
 		}
@@ -65,8 +65,8 @@ public:
 	
 	ComparisonStatisctics Compare(const std::string& text1, const std::string& text2){
 		ComparisonStatisctics result;
-		Line text_line1 = Line(text1, valid_symbols_);
-		Line text_line2 = Line(text2, valid_symbols_);
+		Line text_line1 = std::move(Line(text1, valid_symbols_));
+		Line text_line2 = std::move(Line(text2, valid_symbols_));
 		result.relevance = ComputeRelevance(SplitnIntoWordsNoStop(text_line1), SplitnIntoWordsNoStop(text_line2));
 		result.ngram_relevance = ComputeNgramRelevance(SplitnIntoNgramsNoStop(text_line1), SplitnIntoNgramsNoStop(text_line2));
 		result.jordan_measure = ComputeJordanMeasure(SplitnIntoWordsNoStop(text_line1), SplitnIntoWordsNoStop(text_line2));
