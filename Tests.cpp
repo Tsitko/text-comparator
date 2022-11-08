@@ -1,9 +1,7 @@
 #define NGRAM_SIZE 3
 
-#include "TestingFramework.cpp"
-#include "Line.cpp"
-#include "StopWords.cpp"
-#include "TextComparator.cpp"
+#include "TestingFramework.h"
+#include "TextComparator.h"
 #include <random>
 #include <chrono>
 

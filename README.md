@@ -4,7 +4,7 @@ An easy-to-use tool to compare text variables for data mining in problems such a
 
 ## Using example:  
 ```cpp
-#include "TextComparator.cpp"
+#include "TextComparator.h"
 
 void print(ComparisonStatisctics s){ // printing ComparisonStatisctics
 	std::cout<<"relevance = "<<s.relevance<< " "
@@ -32,6 +32,19 @@ relevance = 0.231049 ngram_relevance = 1.27389 jordan_measure = 0.2 ngram_jordan
 relevance = 0.231049 ngram_relevance = 1.33009 jordan_measure = 0.2 ngram_jordan_measure = 0.380952
 relevance = 0 ngram_relevance = 0 jordan_measure = 0 ngram_jordan_measure = 0
 ```
+
+Compilation for main.cpp is the following:  
+
+```
+g++ main.cpp TextComparator.cpp Line.cpp StopWords.cpp -o main
+```
+
+Compilation for Tests.cpp is the following:  
+
+```
+g++ Tests.cpp TestingFramework.cpp TextComparator.cpp Line.cpp StopWords.cpp -o tests
+```
+
 ## Explanation:  
 First we are creating a _TextComparator_ object. It is initializing with stop words (words which will be deleted from the texts we will try to compare).  
 After it was created we need to _Feed_ it with texts (for example with all the descriptions of the products we have in our shop).  

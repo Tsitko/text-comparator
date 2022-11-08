@@ -1,4 +1,5 @@
-#include "TextComparator.cpp"
+#include "TextComparator.h"
+#include <iostream>
 
 void print(ComparisonStatisctics s){ // printing ComparisonStatisctics
 	std::cout<<"relevance = "<<s.relevance<< " "

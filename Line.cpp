@@ -1,18 +1,12 @@
-#include <set>
-#include <string>
-#include <vector>
+#include "Line.h"
 
-#define LINE
+Line::Line(){}
 
-class Line{
-public:
-	Line(){}
+Line::Line(const std::string& text): line_(text){}
 
-	explicit Line(const std::string& text): line_(text){}
-	
-	explicit Line(const std::string& text, const std::set<char> valid_symbols): line_(text), valid_symbols_(valid_symbols){}
-	
-	std::vector<std::string> SplitWordsToVec() {
+Line::Line(const std::string& text, const std::set<char> valid_symbols): line_(text), valid_symbols_(valid_symbols){}
+
+std::vector<std::string> Line::SplitWordsToVec() {
 		std::string clean_text = std::move(ClearText(line_));
 		std::string temp = "";
 		if(words_vec_.empty()){
@@ -34,8 +28,8 @@ public:
 		}
 		return words_vec_;
 	}
-		
-	std::set<std::string> SplitWordsToSet() {
+
+std::set<std::string> Line::SplitWordsToSet() {
 		if(words_set_.empty()){
 			for(const std::string& word: SplitWordsToVec()){
 				words_set_.insert(word);
@@ -44,14 +38,8 @@ public:
 		
 		return words_set_;
 	}
-	
-private:
-	std::string line_;
-	std::vector<std::string> words_vec_;
-	std::set<std::string> words_set_;
-	std::set<char> valid_symbols_;
-	
-	bool IsValidSymbol(const char c) {
+
+bool Line::IsValidSymbol(const char c) {
 		if(valid_symbols_.empty()){ // initialization
 			valid_symbols_.insert(static_cast<char>(32)); // space
 			for(int i=48; i<=57; ++i){
@@ -66,9 +54,8 @@ private:
 		}
 		return valid_symbols_.count(c);
 	}
-	
-	
-	std::string ClearText(const std::string& text, char replacement = ' ') {
+
+std::string Line::ClearText(const std::string& text, char replacement) {
 		std::string clean_text = "";
 		for(const char c: text){
 			if(IsValidSymbol(c)){
@@ -81,4 +68,3 @@ private:
 		}
 		return clean_text;
 	}
-};
