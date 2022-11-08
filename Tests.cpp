@@ -2,6 +2,7 @@
 
 #include "TestingFramework.h"
 #include "TextComparator.h"
+#include "log_duration.h"
 #include <random>
 #include <chrono>
 
@@ -248,30 +249,34 @@ void SpeedTest(){
 	std::cerr<<std::endl<<std::endl;
 
 	std::cerr<<"--- Adding texts ---"<<std::endl<<std::endl;
-	auto startTime = std::chrono::system_clock::now();
-	for(int i=0; i<texts_to_feed.size(); ++i){
-		tc.Feed(texts_to_feed[i]);
-		if(i%(NUM_TEXTS/100)==0){
-			std::cerr<<"|";
+	{
+		LOG_DURATION("Operation time", std::cerr);
+		for(int i=0; i<texts_to_feed.size(); ++i){
+			tc.Feed(texts_to_feed[i]);
+			if(i%(NUM_TEXTS/100)==0){
+				std::cerr<<"|";
+			}
 		}
+		std::cerr<<std::endl;
+
 	}
-	std::cerr<<std::endl<<std::endl;
-	auto endTime = std::chrono::system_clock::now();
-	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
-	std::cerr<<NUM_TEXTS<<" texts with "<<WORDS_IN_TEXT<<" words in each text were added in "<<std::to_string(duration)<<" ms"<<std::endl<<std::endl;
+	
 
 	std::cerr<<"--- Comparing texts ---"<<std::endl<<std::endl;
-	startTime = std::chrono::system_clock::now();
-	for(int i=1; i<=NUM_TEXTS; ++i){
-		tc.Compare(texts_to_feed[i - 1], texts_to_feed[texts_to_feed.size() - i]);
-		if(i%(NUM_TEXTS/100)==0){
-			std::cerr<<"|";
+	{
+		LOG_DURATION("Operation time", std::cerr);
+		for(int i=1; i<=NUM_TEXTS; ++i){
+			tc.Compare(texts_to_feed[i - 1], texts_to_feed[texts_to_feed.size() - i]);
+			if(i%(NUM_TEXTS/100)==0){
+				std::cerr<<"|";
+			}
 		}
+		std::cerr<<std::endl;
+
 	}
-	std::cerr<<std::endl<<std::endl;
-	endTime = std::chrono::system_clock::now();
-	duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
-	std::cerr<<NUM_TEXTS<<" text pairs were compared in "<<std::to_string(duration)<<" ms"<<std::endl;
+
+	
+
 }
 
 // -------------------------- Run all tests ----------------------------------------------
