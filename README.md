@@ -42,7 +42,7 @@ g++ main.cpp TextComparator.cpp Line.cpp StopWords.cpp -o main
 Compilation for Tests.cpp is the following:  
 
 ```
-g++ Tests.cpp TestingFramework.cpp TextComparator.cpp Line.cpp StopWords.cpp -o tests
+g++ Tests.cpp TestingFramework.cpp TextComparator.cpp Line.cpp StopWords.cpp -o tests -O3
 ```
 
 ## Explanation:  
