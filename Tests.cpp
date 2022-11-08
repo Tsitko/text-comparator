@@ -248,7 +248,7 @@ void SpeedTest(){
 	}
 	std::cerr<<std::endl<<std::endl;
 
-	std::cerr<<"--- Adding texts ---"<<std::endl<<std::endl;
+	std::cerr<<"--- Adding texts --- ("<<NUM_TEXTS<<" texts)"<<std::endl<<std::endl;
 	{
 		LOG_DURATION("Operation time", std::cerr);
 		for(int i=0; i<texts_to_feed.size(); ++i){
@@ -262,7 +262,7 @@ void SpeedTest(){
 	}
 	
 
-	std::cerr<<"--- Comparing texts ---"<<std::endl<<std::endl;
+	std::cerr<<"--- Comparing texts --- ("<<NUM_TEXTS<<" texts)"<<std::endl<<std::endl;
 	{
 		LOG_DURATION("Operation time", std::cerr);
 		for(int i=1; i<=NUM_TEXTS; ++i){
